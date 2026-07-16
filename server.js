@@ -61,3 +61,7 @@ app.post("/api/query", async (req, res) => {
 app.listen(process.env.PORT || 3000, () => {
     console.log("Server started");
 });
+
+app.get("/", (req, res) => {
+    res.send("Server is running");
+});
