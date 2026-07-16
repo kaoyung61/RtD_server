@@ -38,10 +38,13 @@ app.post("/api/query", async (req, res) => {
     }
 
     const { data, error } = await supabase
-        .from("dictionary")
-        .select("call_out")
-        .eq("call_in", value)
-        .single();
+    .from("dictionary")
+    .select("call_out")
+    .eq("call_in", value)
+    .single();
+
+    console.log("DATA:", data);
+    console.log("ERROR:", error);
 
     if (error || !data) {
 
