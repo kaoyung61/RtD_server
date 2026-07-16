@@ -18,6 +18,7 @@ const supabase = createClient(
 app.post("/api/query", async (req, res) => {
 
     const value = req.body.value;
+    console.log("Получено:", value);
 
     if (value === undefined) {
         return res.json({
