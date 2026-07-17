@@ -57,7 +57,7 @@ app.post("/api/query", async (req, res) => {
 
     return res.json({
         type: "text",
-        result: data.call_out
+        result: data.active
     });
 
 });
