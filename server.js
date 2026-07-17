@@ -38,9 +38,9 @@ app.post("/api/query", async (req, res) => {
     }
 
     const { data, error } = await supabase
-    .from("dictionary")
-    .select("call_out")
-    .eq("call_in", value)
+    .from("rooms")
+    .select("active")
+    .eq("name", value)
     .single();
 
     console.log("DATA:", data);
