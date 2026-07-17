@@ -38,8 +38,8 @@ app.post("/api/query", async (req, res) => {
     }
 
     const { data, error } = await supabase
-    .from("rooms")
-    .select("active")
+    .from("maps")
+    .select("territories")
     .eq("name", value)
     .single();
 
@@ -57,7 +57,7 @@ app.post("/api/query", async (req, res) => {
 
     return res.json({
         type: "text",
-        result: data.active
+        result: data.territories
     });
 
 });
