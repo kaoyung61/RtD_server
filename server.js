@@ -1,7 +1,8 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { createClient } from "@supabase/supabase-js";
+
+import { processClientRequest } from "./clientRequest.js";
 
 dotenv.config();
 
@@ -10,62 +11,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const supabase = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_KEY
-);
+app.post("/api/game", async (req, res) => {
 
-app.post("/api/query", async (req, res) => {
+    const answer = await processClientRequest(req.body);
 
-    const value = req.body.value;
-    console.log("Получено:", value);
+    res.json(answer);
 
-    if (value === undefined) {
-        return res.json({
-            error: "No value"
-        });
-    }
-
-    const number = Number(value);
-
-    if (!isNaN(number)) {
-
-        return res.json({
-            type: "number",
-            result: number % 2 === 0 ? "Четное" : "Нечетное"
-        });
-
-    }
-
-    const { data, error } = await supabase
-    .from("maps")
-    .select("territories")
-    .eq("name", value)
-    .single();
-
-    console.log("DATA:", data);
-    console.log("ERROR:", error);
-
-    if (error || !data) {
-
-        return res.json({
-            type: "text",
-            result: "Не найдено"
-        });
-
-    }
-
-    return res.json({
-        type: "text",
-        result: data.territories
-    });
-
-});
-
-app.listen(process.env.PORT || 3000, () => {
-    console.log("Server started");
 });
 
 app.get("/", (req, res) => {
     res.send("Server is running");
+});
+
+app.listen(process.env.PORT || 3000, () => {
+    console.log("Server started");
 });
