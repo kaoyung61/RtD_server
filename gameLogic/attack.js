@@ -4,7 +4,7 @@ import {
     writeDatabaseObject,
     writeDatabaseValue,
     insertDatabaseObject
-} from "../Database.js";
+} from "../database.js";
 
 export async function attack(request) {
 

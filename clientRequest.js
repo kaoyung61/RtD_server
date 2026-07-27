@@ -1,32 +1,26 @@
-//import { start } from "./gameLogic/start.js";
-//import { move } from "./gameLogic/move.js";
 import { attack } from "./gameLogic/attack.js";
-//import { hire } from "./gameLogic/hire.js";
-//import { endTurn } from "./gameLogic/endTurn.js";
+//import { move } from "./gameLogic/move.js";
+//import { start } from "./gameLogic/start.js";
 
-export async function processClientRequest(request) {
 
-    switch (request.command) {
+export async function processClientRequest(request){
+
+    switch(request.command){
 
         case "start":
             return await start(request);
 
-        case "move":
-            return await move(request);
-
         case "attack":
             return await attack(request);
 
-        case "hire":
-            return await hire(request);
+        case "move":
+            return await move(request);
 
-        case "end":
-            return await endTurn(request);
+        default:
 
-
-
-
-            
-        default: return {success: false,error: "Unknown command"};
+            return {
+                success:false,
+                error:"Unknown command"
+            };
     }
 }
