@@ -27,10 +27,6 @@ export async function processClientRequest(request) {
 
 
             
-        default:
-            return {
-                success: false,
-                error: "Unknown command"
-            };
+        default: return {success: false,error: "Unknown command"};
     }
 }

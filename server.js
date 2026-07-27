@@ -12,11 +12,8 @@ app.use(cors());
 app.use(express.json());
 
 app.post("/api/game", async (req, res) => {
-
     const answer = await processClientRequest(req.body);
-
     res.json(answer);
-
 });
 
 app.get("/", (req, res) => {
@@ -26,3 +23,11 @@ app.get("/", (req, res) => {
 app.listen(process.env.PORT || 3000, () => {
     console.log("Server started");
 });
+
+
+
+
+// ------- Web Socket server -------
+const server = http.createServer(app);
+startWebSocket(server);
+server.listen(PORT);
