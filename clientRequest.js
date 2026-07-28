@@ -8,13 +8,13 @@ export async function processClientRequest(request){
 
     switch(request.command){
 
-        case "start":
+        case "login":
             return await start(request);
 
-        case "attack":
+        case "getLobby":
             return await attack(request);
 
-        case "move":
+        case "getMap":
             return await move(request);
 
         default:
@@ -24,4 +24,24 @@ export async function processClientRequest(request){
                 error:"Unknown command"
             };
     }
+};
+
+export function processWebSocketRequest(socket, request) {
+
+    switch (request.type) {
+
+        case "setName":
+            return setName(socket, request);
+
+        case "message":
+            return message(socket, request);
+
+        case "attack":
+            return attack(socket, request); //???
+
+        default:
+            console.log("Unknown request:", request.type);
+
+    }
+
 }

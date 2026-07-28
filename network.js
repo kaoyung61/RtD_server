@@ -1,4 +1,5 @@
 import { WebSocketServer } from "ws";
+import { processWebSocketRequest } from "./clientRequest.js";
 
 const players = new Map();
 
@@ -20,26 +21,9 @@ export function startWebSocket(server) {
 }
 
 function receiveMessage(socket, data) {
-    console.log("Client message:", data);
-    switch (data.type) {
-        case "setName":
-            if (socket.playerName) {players.delete(socket.playerName);}
-            socket.playerName = data.name;
-            players.set(data.name, socket);
-            console.log(`${data.name} registered`);
-            break;
-
-        case "message":
-            sendToPlayer(data.to, {
-                type: "message",
-                from: socket.playerName,
-                text: data.text
-            });
-            break;
-
-    }
-
+    processWebSocketRequest(socket, data);
 }
+
 
 export function sendToPlayer(playerName, data) {
     const socket = players.get(playerName);
