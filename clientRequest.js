@@ -1,5 +1,6 @@
-import { attack } from "./gameLogic/attack.js";
-//import { move } from "./gameLogic/move.js";
+//import { attack } from "./gameLogic/attack.js";
+import { setName } from "./gameLogic/testServer.js";
+import { message } from "./gameLogic/testServer.js";
 //import { start } from "./gameLogic/start.js";
 
 
