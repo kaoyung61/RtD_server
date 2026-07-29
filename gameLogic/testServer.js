@@ -34,6 +34,7 @@ export function sendTerritoryInfo(socket, request) {
         console.log(`Player '${request.to}' not found`);
         return;
     }
+    console.log(request);
     territoriesInfo=readDatabaseObject("maps","id",1,"territories")
     serverAntwort=JSON.stringify(territoriesInfo[request.number])
 
