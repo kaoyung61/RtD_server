@@ -27,3 +27,19 @@ export function message(socket, request) {
     }));
 
 }
+
+export function sendTerritoryInfo(socket, request) {
+    const target = players.get(request.to);
+    if (!target) {
+        console.log(`Player '${request.to}' not found`);
+        return;
+    }
+    territoriesInfo=readDatabaseObject("maps","id",1,"territories")
+    serverAntwort=JSON.stringify(territoriesInfo[request.number])
+
+    target.send(JSON.stringify({
+        type: "terrInfo",
+        from: socket.playerName,
+        text: serverAntwort
+    }));
+}

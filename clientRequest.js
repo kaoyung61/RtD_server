@@ -38,6 +38,9 @@ export function processWebSocketRequest(socket, request) {
 
         case "attack":
             return attack(socket, request); //???
+        
+        case "territoryInfo":
+            return sendTerritoryInfo(socket, request);
 
         default:
             console.log("Unknown request:", request.type);
