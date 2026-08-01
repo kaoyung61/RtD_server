@@ -1,4 +1,4 @@
-import { WebSocketServer } from "ws";
+import { WebSocketServer, WebSocket } from "ws";
 import { processWebSocketRequest } from "./serverRequestFromClient.js";
 
 const players = new Map();
@@ -25,13 +25,26 @@ function receiveMessage(socket, data) {
 }
 
 
-export function sendToPlayer(playerName, data) {
-    const socket = players.get(playerName);
-    if (!socket) {
-        console.log(`Player '${playerName}' not found`);
-        return;
+export function sendToSocket(socket, data) {
+    if (!socket || socket.readyState !== WebSocket.OPEN) {
+        console.log("Socket not connected");
+        return false;
     }
+
     socket.send(JSON.stringify(data));
+    return true;
+}
+
+
+export function sendToPlayer(playerToken, data) {
+    const socket = players.get(playerToken);
+
+    if (!socket) {
+        console.log(`Player '${playerToken}' not found`);
+        return false;
+    }
+
+    return sendToSocket(socket, data);
 }
 
 export function sendToAll(data) {
