@@ -1,5 +1,5 @@
 import { WebSocketServer } from "ws";
-import { processWebSocketRequest } from "./clientRequest.js";
+import { processWebSocketRequest } from "./serverRequestFromClient.js";
 
 const players = new Map();
 

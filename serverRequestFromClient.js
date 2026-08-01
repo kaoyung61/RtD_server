@@ -1,5 +1,5 @@
 //import { attack } from "./gameLogic/attack.js";
-import { playerlogin } from "./gameLogic/auth_script.js";
+//import { playerlogin } from "./gameLogic/auth_script.js";
 //import { sendTerritoryInfo } from "./gameLogic/testServer.js";
 //import { start } from "./gameLogic/start.js";
 
