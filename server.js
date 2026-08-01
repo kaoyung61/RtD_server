@@ -5,7 +5,7 @@ import cors from "cors";
 import http from "http";
 import dotenv from "dotenv";
 
-import { processClientRequest } from "./serverRequestFromClient.js";
+//import { processClientRequest } from "./serverRequestFromClient.js";
 import { startWebSocket } from "./serverNetwork.js";
 
 dotenv.config();
