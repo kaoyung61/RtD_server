@@ -11,17 +11,29 @@ export function startWebSocket(server) {
         socket.on("message", message => {
             console.log("RAW:", message.toString());
 
-            try {
-                const data = JSON.parse(message.toString());
-                console.log("DATA:", data);
+            let data;
 
-                receiveMessage(socket, data);
+            try {
+                data = JSON.parse(message.toString());
             } catch (error) {
-                console.log(error);
+                console.log("JSON error:", error);
 
                 sendToSocket(socket, {
                     type: "error",
-                    data: "Invalid request format"
+                    data: "Invalid JSON"
+                });
+
+                return;
+            }
+
+            try {
+                receiveMessage(socket, data);
+            } catch (error) {
+                console.log("Server error:", error);
+
+                sendToSocket(socket, {
+                    type: "error",
+                    data: "Server error"
                 });
             }
         });
