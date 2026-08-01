@@ -27,6 +27,7 @@ export function startWebSocket(server) {
             }
         });
     });
+}
 
 function receiveMessage(socket, data) {
     processWebSocketRequest(socket, data);
