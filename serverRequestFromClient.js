@@ -34,7 +34,7 @@ newClientRegistration
 
 
 
-export function processWebSocketRequest(socket, request) {
+export async function processWebSocketRequest(socket, request) {
     switch (request.command) {
 
         case "authoriseMe":
