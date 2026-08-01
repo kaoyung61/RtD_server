@@ -34,7 +34,6 @@ newClientRegistration
 
 
 export function processWebSocketRequest(socket, request) {
-    console.log("processWebSocketRequest ", socket, " called with request:", request);
     switch (request.type) {
 
         case "authoriseMe":
@@ -47,7 +46,7 @@ export function processWebSocketRequest(socket, request) {
             return CR_newClientRegistration(socket, request);
 
         default:
-            console.log("Unknown request");
+            console.log("Unknown request: ", request);
 
     }
 
