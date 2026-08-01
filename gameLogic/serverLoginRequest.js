@@ -1,5 +1,5 @@
 import { sendToSocket, sendToPlayer } from "../serverNetwork.js";
-import { readDatabaseObject } from "../database.js";
+import { readDatabaseObject } from "./serverDatabase.js";
 
 
 export function CR_loginClient(socket, request) {
