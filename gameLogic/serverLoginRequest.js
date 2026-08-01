@@ -4,7 +4,7 @@ import { readDatabaseObject } from "../serverDatabase.js";
 
 export function CR_loginClient(socket, request) {
     console.log("CR_loginClient start");
-    let player = readDatabaseObject("players", "login", request.data.login, "*");
+    let player = await readDatabaseObject("players", "login", request.data.login, "*");
     console.log("CR_loginClient: player:", player);
     if (player.password === request.data.password) {
         sendToSocket(socket, { command: "token", token: player.token });
