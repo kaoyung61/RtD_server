@@ -9,10 +9,16 @@ export function startWebSocket(server) {
         console.log("Client connected");
 
         socket.on("message", message => {
+            console.log("RAW:", message.toString());
+
             try {
-                const data = JSON.parse(message);
+                const data = JSON.parse(message.toString());
+                console.log("DATA:", data);
+
                 receiveMessage(socket, data);
             } catch (error) {
+                console.log(error);
+
                 sendToSocket(socket, {
                     type: "error",
                     data: "Invalid request format"

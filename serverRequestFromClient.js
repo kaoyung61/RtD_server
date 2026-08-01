@@ -2,7 +2,7 @@
 //import { playerlogin } from "./gameLogic/auth_script.js";
 import { CR_authoriseMe, CR_loginClient, CR_newClientRegistration } from "./gameLogic/serverLoginRequest.js";
 
-export async function processClientRequest(request){
+/*export async function processClientRequest(request){
 
     switch(request.command){
 
@@ -23,6 +23,7 @@ export async function processClientRequest(request){
             };
     }
 };
+*/
 
 /*
 authoriseMe
