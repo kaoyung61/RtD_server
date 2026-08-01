@@ -1,8 +1,6 @@
 //import { attack } from "./gameLogic/attack.js";
 //import { playerlogin } from "./gameLogic/auth_script.js";
-//import { sendTerritoryInfo } from "./gameLogic/testServer.js";
-//import { start } from "./gameLogic/start.js";
-
+import { CR_authoriseMe, CR_loginClient, CR_newClientRegistration } from "./gameLogic/serverLoginRequest.js";
 
 export async function processClientRequest(request){
 
@@ -26,17 +24,30 @@ export async function processClientRequest(request){
     }
 };
 
-export function processWebSocketRequest(socket, request) {
+/*
+authoriseMe
+loginClient
+newClientRegistration
+*/
 
+
+
+
+export function processWebSocketRequest(socket, request) {
+    console.log("processWebSocketRequest ", socket, " called with request:", request);
     switch (request.type) {
 
-        case "setName":
-            return setName(socket, request);
+        case "authoriseMe":
+            return CR_authoriseMe(socket, request);
 
-        
+        case "loginClient":
+            return CR_loginClient(socket, request);
+
+        case "newClientRegistration":
+            return CR_newClientRegistration(socket, request);
 
         default:
-            console.log("Unknown request:", request.type);
+            console.log("Unknown request");
 
     }
 
