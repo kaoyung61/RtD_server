@@ -1,6 +1,6 @@
 //import { attack } from "./gameLogic/attack.js";
-import { setName } from "./gameLogic/testServer.js";
-import { sendTerritoryInfo } from "./gameLogic/testServer.js";
+import { playerlogin } from "./gameLogic/auth_script.js";
+//import { sendTerritoryInfo } from "./gameLogic/testServer.js";
 //import { start } from "./gameLogic/start.js";
 
 
@@ -33,14 +33,7 @@ export function processWebSocketRequest(socket, request) {
         case "setName":
             return setName(socket, request);
 
-        case "message":
-            return message(socket, request);
-
-        case "attack":
-            return attack(socket, request); //???
         
-        case "territoryInfo":
-            return sendTerritoryInfo(socket, request);
 
         default:
             console.log("Unknown request:", request.type);
