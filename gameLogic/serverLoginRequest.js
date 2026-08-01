@@ -6,11 +6,11 @@ export function CR_loginClient(socket, request) {
     console.log("CR_loginClient start");
     let player = readDatabaseObject("players", "login", request.data.login, "*");
     console.log("CR_loginClient: player:", player);
-    if (player.pasword === request.data.password) {
+    if (player.password === request.data.password) {
         sendToSocket(socket, { command: "token", token: player.token });
     } else {
         sendToSocket(socket, { command: "error", type: "login" });
-    }
+    };
     console.log("CR_loginClient end");
 
 }
