@@ -7,22 +7,53 @@ export function startWebSocket(server) {
     const wss = new WebSocketServer({ server });
     wss.on("connection", socket => {
         console.log("Client connected");
+
         socket.on("message", message => {
-            const data = JSON.parse(message);
-            receiveMessage(socket, data);
+            try {
+                const data = JSON.parse(message);
+                receiveMessage(socket, data);
+            } catch (error) {
+                sendToSocket(socket, {
+                    type: "error",
+                    data: "Invalid request format"
+                });
+            }
         });
+
         socket.on("close", () => {
-            if (socket.playerName) {
-                players.delete(socket.playerName);
-                console.log(`${socket.playerName} disconnected`);
+            if (socket.playerToken) {
+                players.delete(socket.playerToken);
+                console.log(`${socket.playerToken} disconnected`);
             }
         });
     });
-}
 
 function receiveMessage(socket, data) {
     processWebSocketRequest(socket, data);
 }
+
+
+export function authorizePlayer(socket, token) {
+    // проверка токена в базе
+
+    const success = true; // результат проверки
+
+    if (success) {
+        socket.playerToken = token;
+        players.set(token, socket);
+
+        sendToSocket(socket, {
+            type: "auth_success"
+        });
+    }
+}
+
+
+
+
+
+
+
 
 
 export function sendToSocket(socket, data) {
