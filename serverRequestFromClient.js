@@ -34,7 +34,7 @@ newClientRegistration
 
 
 export function processWebSocketRequest(socket, request) {
-    switch (request.type) {
+    switch (request.command) {
 
         case "authoriseMe":
             return CR_authoriseMe(socket, request);
