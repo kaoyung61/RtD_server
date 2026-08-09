@@ -52,28 +52,6 @@ function receiveMessage(socket, data) {
 }
 
 
-export function authorizePlayer(socket, token) {
-    // проверка токена в базе
-
-    const success = true; // результат проверки
-
-    if (success) {
-        socket.playerToken = token;
-        players.set(token, socket);
-
-        sendToSocket(socket, {
-            type: "auth_success"
-        });
-    }
-}
-
-
-
-
-
-
-
-
 
 export function sendToSocket(socket, data) {
     if (!socket || socket.readyState !== WebSocket.OPEN) {
