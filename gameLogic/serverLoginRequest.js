@@ -8,6 +8,7 @@ export async function CR_loginClient(socket, request) {
     console.log("CR_loginClient: player:", player);
     if (player.password === request.data.password) {
         sendToSocket(socket, { command: "token", token: player.token });
+        sendLobby(socket, player.token);
     } else {
         sendToSocket(socket, { command: "error", type: "login" });
     };
@@ -29,8 +30,8 @@ export async function CR_newClientRegistration(socket, request) {
 }
 
 
-export async function CR_getLobby(socket, token) {
-    console.log("CR_getLobby start");
+export async function sendLobby(socket, token) {
+    console.log("sendLobby start");
     let playerID = await readDatabaseObject("players", "token", token, "id");
     let playerRoomsID = await readDatabaseObject("players", "token", playerID, "rooms");
     let playerRooms = [];
@@ -39,5 +40,5 @@ export async function CR_getLobby(socket, token) {
         playerRooms.push(room);
     }
     sendToSocket(socket, { command: "rooms", rooms: playerRooms });
-    console.log("CR_getLobby end");
+    console.log("sendLobby end");
 }
