@@ -44,7 +44,7 @@ export async function sendLobby(socket, token) {
     console.log("sendLobby: playerRoomsID:", playerRoomsID);
     let playerRooms = [];
     for (let n of playerRoomsID) {
-        let roomID = await readDatabaseValue("rooms", "id", n, "id");
+        let roomID = n;
         let roomName = await readDatabaseValue("rooms", "id", n, "name");
         let roomMap = await readDatabaseValue("rooms", "id", n, "map");
         let room = {
