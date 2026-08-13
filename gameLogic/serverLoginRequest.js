@@ -3,16 +3,16 @@ import { readDatabaseObject, readDatabaseValue } from "../serverDatabase.js";
 
 
 export async function CR_loginClient(socket, request) {
-    console.log("CR_loginClient start");
+    //console.log("CR_loginClient start");
     let player = await readDatabaseObject("players", "login", request.data.login, "*");
-    console.log("CR_loginClient: player:", player);
+    //console.log("CR_loginClient: player:", player);
     if (player.password === request.data.password) {
         sendToSocket(socket, { command: "token", token: player.token });
         sendLobby(socket, player.token);
     } else {
         sendToSocket(socket, { command: "error", type: "login" });
     };
-    console.log("CR_loginClient end");
+    //console.log("CR_loginClient end");
 
 }
 
@@ -41,12 +41,15 @@ export async function CR_connectRoom(socket, request) {
     console.log("CR_connectRoom start");
     let playerID = await readDatabaseValue("players", "token", request.token, "id");
     let playerRoomsID = await readDatabaseValue("players", "token", request.token, "rooms");
-    if (playerRoomsID.includes(request.data.roomID)) {
+    let roomID = Number(request.data.roomID);
+    console.log("Player _" + playerID + "_ connecting to room _" + roomID + "_");
+    console.log("Available rooms for player _" + playerID + "_ : _", playerRoomsID+ "_");
+    if (playerRoomsID.includes(roomID)) {
         sendToPlayer(playerID, { command: "connectRoom", access: true });
-        console.log("Player _" + playerID + "_ connecting to room _" + playerRoomsID + "_");
+        console.log("Player _" + playerID + "_ connecting to room _" + roomID + "_");
     } else {
         sendToSocket(socket, { command: "error", text: "Player is not allowed to connect to this room" });
-        console.log("Error: Player _" + playerID + "_ is not allowed to connect to room _" + request.data.roomID + "_");
+        console.log("Error: Player _" + playerID + "_ is not allowed to connect to room _" + roomID + "_");
     }
     console.log("CR_connectRoom end");
 }
