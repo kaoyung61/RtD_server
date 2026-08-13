@@ -39,13 +39,14 @@ export async function CR_getLobby(socket, request) {
 
 export async function CR_connectRoom(socket, request) {
     console.log("CR_connectRoom start");
-    let playerID = await readDatabaseValue("players", "token", request.token, "id");
+    let playerIDtext = await readDatabaseValue("players", "token", request.token, "id");
+    let playerID = Number(playerIDtext);
     let playerRoomsID = await readDatabaseValue("players", "token", request.token, "rooms");
     let roomID = Number(request.data.roomID);
     console.log("Player _" + playerID + "_ connecting to room _" + roomID + "_");
     console.log("Available rooms for player _" + playerID + "_ : _", playerRoomsID+ "_");
     if (playerRoomsID.includes(roomID)) {
-        sendToPlayer(playerID, { command: "connectRoom", access: true });
+        sendToSocket(socket, { command: "connectRoom", access: true });
         console.log("Player _" + playerID + "_ connecting to room _" + roomID + "_");
     } else {
         sendToSocket(socket, { command: "error", text: "Player is not allowed to connect to this room" });
