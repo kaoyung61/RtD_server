@@ -33,11 +33,13 @@ export async function CR_newClientRegistration(socket, request) {
 export async function sendLobby(socket, token) {
     console.log("sendLobby start");
     let playerID = await readDatabaseObject("players", "token", token, "id");
-    let playerRoomsID = await readDatabaseObject("players", "token", token, "rooms");
+    let playerRoomsID = JSON.stringify(await readDatabaseObject("players", "token", token, "rooms"));
+    console.log("sendLobby: playerRoomsID:", playerRoomsID);
     let playerRooms = [];
     for (let n of playerRoomsID) {
         let room = await readDatabaseObject("rooms", "id", n, "*");
         playerRooms.push(room);
+        console.log("sendLobby: playerRooms: ",n, " ", playerRooms);
     }
     sendToSocket(socket, { command: "rooms", rooms: playerRooms });
     console.log("sendLobby end");
