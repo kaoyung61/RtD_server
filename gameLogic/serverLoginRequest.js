@@ -29,10 +29,17 @@ export async function CR_newClientRegistration(socket, request) {
     console.log("CR_newClientRegistration end");
 }
 
+export async function CR_getLobby(socket, request) {
+    console.log("CR_getLobby start");
+    let playerToken = await readDatabaseValue("players", "token", request.token, "id");
+    sendLobby(socket, playerToken);
+    console.log("CR_getLobby end");
+}
+
+
 
 export async function sendLobby(socket, token) {
     console.log("sendLobby start");
-    let playerID = await readDatabaseValue("players", "token", token, "id");
     let playerRoomsID = await readDatabaseValue("players", "token", token, "rooms");
     console.log("sendLobby: playerRoomsID:", playerRoomsID);
     let playerRooms = [];

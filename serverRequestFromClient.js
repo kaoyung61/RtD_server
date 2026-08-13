@@ -46,6 +46,9 @@ export async function processWebSocketRequest(socket, request) {
         case "newClientRegistration":
             return CR_newClientRegistration(socket, request);
 
+        case "getLobby":
+            return CR_getLobby(socket, request);
+
         default:
             console.log("Unknown request: ", request);
 
