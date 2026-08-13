@@ -1,5 +1,5 @@
 import { sendToSocket, sendToPlayer } from "../serverNetwork.js";
-import { readDatabaseObject } from "../serverDatabase.js";
+import { readDatabaseObject, readDatabaseValue } from "../serverDatabase.js";
 
 
 export async function CR_loginClient(socket, request) {
@@ -37,9 +37,9 @@ export async function sendLobby(socket, token) {
     console.log("sendLobby: playerRoomsID:", playerRoomsID);
     let playerRooms = [];
     for (let n of playerRoomsID) {
-        let roomID = await readDatabaseObject("rooms", "id", n, "id");
-        let roomName = await readDatabaseObject("rooms", "id", n, "name");
-        let roomMap = await readDatabaseObject("rooms", "id", n, "map");
+        let roomID = await readDatabaseValue("rooms", "id", n, "id");
+        let roomName = await readDatabaseValue("rooms", "id", n, "name");
+        let roomMap = await readDatabaseValue("rooms", "id", n, "map");
         let room = {
             id: roomID,
             name: roomName,
