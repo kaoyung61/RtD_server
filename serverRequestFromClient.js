@@ -1,6 +1,6 @@
 //import { attack } from "./gameLogic/attack.js";
 //import { playerlogin } from "./gameLogic/auth_script.js";
-import { CR_authoriseMe, CR_loginClient, CR_newClientRegistration } from "./gameLogic/serverLoginRequest.js";
+import { CR_authoriseMe, CR_loginClient, CR_newClientRegistration, CR_connectRoom} from "./gameLogic/serverLoginRequest.js";
 
 /*export async function processClientRequest(request){
 
@@ -46,8 +46,11 @@ export async function processWebSocketRequest(socket, request) {
         case "newClientRegistration":
             return CR_newClientRegistration(socket, request);
 
-        case "getLobby":
-            return CR_getLobby(socket, request);
+        case "connectRoom":
+            return CR_connectRoom(socket, request);
+        
+        //case "getMap":
+        //    return CR_getLobby(socket, request);
 
         default:
             console.log("Unknown request: ", request);
