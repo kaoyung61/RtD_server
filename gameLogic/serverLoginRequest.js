@@ -48,6 +48,8 @@ export async function CR_connectRoom(socket, request) {
     if (playerRoomsID.includes(roomID)) {
         sendToPlayer(playerID, { command: "connectRoom", access: true });
         sendRoomState(playerID, roomID);
+        let RoomMap = await readDatabaseValue("rooms", "id", roomID, "map");
+        sendMapData(playerID, RoomMap)
         console.log("Player _" + playerID + "_ connecting to room _" + roomID + "_");
     } else {
         sendToPlayer(playerID, { command: "error", text: "Player is not allowed to connect to this room" });
@@ -100,4 +102,12 @@ export async function sendRoomState(playerID, RoomID) {
     sendToPlayer(playerToken, { command: "roomState", data: dataToSend })
     //sendToSocket(socket, { command: "roomState", data: dataToSend });
 
+}
+
+
+export async function sendMapData(playerID, RoomMap) {
+    let roomMapInfo = await readDatabaseObject("rooms", "name", RoomMap, "*");
+
+    let playerToken = await readDatabaseValue("players", "id", playerID, "token");
+    sendToPlayer(playerToken, { command: "mapData", data: roomMapInfo })
 }
