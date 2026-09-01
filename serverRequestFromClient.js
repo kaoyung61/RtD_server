@@ -1,6 +1,7 @@
 //import { attack } from "./gameLogic/attack.js";
 //import { playerlogin } from "./gameLogic/auth_script.js";
 import { CR_authoriseMe, CR_loginClient, CR_newClientRegistration, CR_connectRoom} from "./gameLogic/serverLoginRequest.js";
+import { registerPlayer } from "./serverNetwork.js";
 
 /*export async function processClientRequest(request){
 
@@ -48,6 +49,9 @@ export async function processWebSocketRequest(socket, request) {
 
         case "connectRoom":
             return CR_connectRoom(socket, request);
+
+        case "registerPlayer":
+            return registerPlayer(socket, request.token);
         
         //case "getMap":
         //    return CR_getLobby(socket, request);
