@@ -1,5 +1,5 @@
 console.log("______________________________________________________________");
-
+import {loadServerMemory, players, rooms, maps, playerSockets, socketPlayers} from "./serverMemory.js";
 import express from "express";
 import cors from "cors";
 import http from "http";
@@ -31,6 +31,14 @@ app.get("/", (req,res)=>{
 
 
 const server = http.createServer(app);
+
+try {
+    await loadServerMemory();
+    startWebSocket(server);
+    server.listen(process.env.PORT || 3000, () => console.log("Server started"));
+} catch (error) {
+    console.error("Server memory loading failed:", error);
+}
 
 startWebSocket(server);
 

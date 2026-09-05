@@ -1,31 +1,49 @@
-//import { attack } from "./gameLogic/attack.js";
-//import { playerlogin } from "./gameLogic/auth_script.js";
-import { CR_authoriseMe, CR_loginClient, CR_newClientRegistration, CR_connectRoom} from "./gameLogic/serverLoginRequest.js";
-import { registerPlayer } from "./serverNetwork.js";
+import {players, rooms, maps, playerSockets, socketPlayers} from "./serverMemory.js";
+
+import {    client_loginOnServer,
+            client_authoriseOnServer,
+            client_newRegistration,
+            client_connectRoom,
+            client_requestMapData
+        } from "./gameLogic/serverLoginRequest.js";
+
+
 
 
 
 export async function clientRequest(socket, request) {
     switch (request.command) {
 
-        case "authoriseMe":
-            return CR_authoriseMe(socket, request);
+        //
+        // from "./gameLogic/serverLoginRequest.js";
+        //
+        case "loginOnServer":
+            return client_loginOnServer(socket, request.data);
 
-        case "loginClient":
-            return CR_loginClient(socket, request);
+        case "authoriseOnServer":
+            return client_authoriseOnServer(socket, request.data);
 
         case "newClientRegistration":
-            return CR_newClientRegistration(socket, request);
+            return client_newRegistration(socket, request.data);
+
+
+
+        case "requestLobby":
+            return client_requestLobby(socket, request);
 
         case "connectRoom":
-            return CR_connectRoom(socket, request);
+            return client_connectRoom(socket, request);
 
-        case "registerPlayer":
-            return registerPlayer(socket, request.token);
+        case "requestMapData":
+            return client_requestMapData(socket, request);
         
-        //case "getMap":
-        //    return CR_getLobby(socket, request);
+        case "requestRoomState":
+            return client_requestRoomState(socket, request);
 
+
+        //
+        // ELSE
+        //
         default:
             console.log("Unknown request: ", request);
 
