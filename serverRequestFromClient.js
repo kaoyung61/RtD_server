@@ -3,39 +3,9 @@
 import { CR_authoriseMe, CR_loginClient, CR_newClientRegistration, CR_connectRoom} from "./gameLogic/serverLoginRequest.js";
 import { registerPlayer } from "./serverNetwork.js";
 
-/*export async function processClientRequest(request){
-
-    switch(request.command){
-
-        case "login":
-            return await start(request);
-
-        case "getLobby":
-            return await attack(request);
-
-        case "getMap":
-            return await move(request);
-
-        default:
-
-            return {
-                success:false,
-                error:"Unknown command"
-            };
-    }
-};
-*/
-
-/*
-authoriseMe
-loginClient
-newClientRegistration
-*/
 
 
-
-
-export async function processWebSocketRequest(socket, request) {
+export async function clientRequest(socket, request) {
     switch (request.command) {
 
         case "authoriseMe":
