@@ -3,7 +3,7 @@
 // import {players, rooms, maps, playerSockets, socketPlayers} from "./serverMemory.js";
 // import {readMemoryValue, updateMemoryValue} from "./serverMemory.js";
 
-import { updateDatabaseValue } from "./serverDatabase.js";
+import { writeDatabaseValue } from "./serverDatabase.js";
 
 export const playerSockets = new Map(); // playerId -> socket
 export const socketPlayers = new Map(); // socket -> playerId
@@ -34,7 +34,7 @@ export async function updateMemoryValue(memoryMap, id, column, value) {
     if (!object) { console.log(`Memory object '${id}' not found`); return false; }
 
     const tableName = memoryMap.name.replace("DB", "");
-    const success = await updateDatabaseValue(tableName, "id", id, column, value);
+    const success = await writeDatabaseValue(tableName, "id", id, column, value);
     if (!success) { console.log(`Database update failed: ${tableName}.${column}, ID '${id}'`); return false; }
 
     object[column] = value;
