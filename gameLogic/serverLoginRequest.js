@@ -129,3 +129,7 @@ export async function client_requestMapData(socket, request) { // функция
     sendToSocket(socket, { command: "mapData", data: roomMapInfo });
     console.log("client_requestMapData end");
 }
+
+export async function client_requestRoomState(socket, request) { // функция отсылает данные карты любому
+    console.log("client_requestRoomState start");
+}
