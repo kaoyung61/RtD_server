@@ -1,5 +1,5 @@
 console.log("______________________________________________________________");
-import {loadServerMemory, players, rooms, maps, playerSockets, socketPlayers} from "./serverMemory.js";
+import {loadServerMemory, playersDB, roomsDB, mapsDB, playerSockets, socketPlayers} from "./serverMemory.js";
 import express from "express";
 import cors from "cors";
 import http from "http";

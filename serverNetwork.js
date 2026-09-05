@@ -1,6 +1,6 @@
 import { WebSocketServer, WebSocket } from "ws";
 import { clientRequest } from "./serverRequestFromClient.js";
-import {players, rooms, maps, playerSockets, socketPlayers} from "./serverMemory.js";
+import {playersDB, roomsDB, mapsDB, playerSockets, socketPlayers} from "./serverMemory.js";
 
 export function startWebSocket(server) {
     const wss = new WebSocketServer({ server });

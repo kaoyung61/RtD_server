@@ -1,14 +1,14 @@
 import { sendToSocket, sendToPlayer } from "../serverNetwork.js";
 import { readDatabaseObject, readDatabaseValue } from "../serverDatabase.js";
 import { registerPlayer, getPlayerId} from "../serverNetwork.js";
-import {players, rooms, maps, playerSockets, socketPlayers} from "../serverMemory.js";
+import {playersDB, roomsDB, mapsDB, playerSockets, socketPlayers} from "../serverMemory.js";
 import {readMemoryValue, updateMemoryValue} from "../serverMemory.js";
 
 
 
 export async function client_loginOnServer(socket, data) {
     //console.log("CR_loginClient start");
-    let player = readMemoryValue(players, "login", data.login, "*");
+    let player = readMemoryValue(playersDB, "login", data.login, "*");
     //console.log("CR_loginClient: player:", player);
     if (player.password === data.password) {
         sendToSocket(socket, { command: "token", token: player.token });
@@ -23,7 +23,7 @@ export async function client_loginOnServer(socket, data) {
 
 export async function client_authoriseOnServer(socket, data) {
     console.log("client_authoriseOnServer start");
-    const playerID = readMemoryValue(players, "token", data.token, "id");
+    const playerID = readMemoryValue(playersDB, "token", data.token, "id");
 
     if (!playerID) {
         sendToSocket(socket, { command: "errAuth", text: "Authorisation failed" });
@@ -47,15 +47,15 @@ export async function client_newRegistration(socket, data) {
 export async function client_connectRoom(socket, request) {
     console.log("client_connectRoom start");
     let playerID = getPlayerId(socket);
-    let playerRoomsID = readMemoryValue(players, "id", playerID, "rooms");
+    let playerRoomsID = readMemoryValue(playersDB, "id", playerID, "rooms");
     let roomID = Number(request.data.roomID);
     console.log("Player _" + playerID + "_ connecting to room _" + roomID + "_");
     console.log("Available rooms for player _" + playerID + "_ : _", playerRoomsID+ "_");
     if (playerRoomsID.includes(roomID)) {
         let room = {
             id: roomID,
-            name: readMemoryValue(rooms, "id", roomID, "name"),
-            map: readMemoryValue(rooms, "id", roomID, "map")
+            name: readMemoryValue(roomsDB, "id", roomID, "name"),
+            map: readMemoryValue(roomsDB, "id", roomID, "map")
         };
         sendToPlayer(playerID, { command: "RoomConnection", room: room });
         //sendRoomState(playerID, roomID);
@@ -79,13 +79,13 @@ export async function client_requestLobby(socket, request) {
 
 export async function sendLobby(playerID) { 
     console.log("sendLobby for player " + playerID + " start");
-    let playerRoomsID = readMemoryValue(players, "id", playerID, "rooms");
+    let playerRoomsID = readMemoryValue(playersDB, "id", playerID, "rooms");
     console.log("playerRoomsID:", playerRoomsID);
     let playerRooms = [];
     for (let n of playerRoomsID) {
         let roomID = n;
-        let roomName = readMemoryValue(rooms, "id", n, "name");
-        let roomMap = readMemoryValue(rooms, "id", n, "map");
+        let roomName = readMemoryValue(roomsDB, "id", n, "name");
+        let roomMap = readMemoryValue(roomsDB, "id", n, "map");
         let room = {
             id: roomID,
             name: roomName,
@@ -101,11 +101,11 @@ export async function sendLobby(playerID) {
 
 export async function sendRoomState(playerID, RoomID) {
     let roomID = Number(RoomID);
-    let roomName = readMemoryValue(rooms, "id", roomID, "name");
-    let roomMap = readMemoryValue(rooms, "id", roomID, "map");
-    let gameState = readMemoryValue(rooms, "id", roomID, "gameState");
-    let playerState = readMemoryValue(rooms, "id", roomID, "playerState");
-    let territoriesState = readMemoryValue(rooms, "id", roomID, "territories");
+    let roomName = readMemoryValue(roomsDB, "id", roomID, "name");
+    let roomMap = readMemoryValue(roomsDB, "id", roomID, "map");
+    let gameState = readMemoryValue(roomsDB, "id", roomID, "gameState");
+    let playerState = readMemoryValue(roomsDB, "id", roomID, "playerState");
+    let territoriesState = readMemoryValue(roomsDB, "id", roomID, "territories");
 
     let dataToSend = {
         roomID: roomID,
@@ -125,7 +125,7 @@ export async function sendRoomState(playerID, RoomID) {
 
 export async function client_requestMapData(socket, request) { // функция отсылает данные карты любому 
     console.log("client_requestMapData start");
-    let roomMapInfo = readMemoryValue(maps, "name", request.map, "*");
+    let roomMapInfo = readMemoryValue(mapsDB, "name", request.map, "*");
     sendToSocket(socket, { command: "mapData", data: roomMapInfo });
     console.log("client_requestMapData end");
 }

@@ -1,9 +1,13 @@
-import {players, rooms, maps, playerSockets, socketPlayers} from "./serverMemory.js";
+import {playersDB, roomsDB, mapsDB, playerSockets, socketPlayers} from "./serverMemory.js";
 
 import {    client_loginOnServer,
             client_authoriseOnServer,
             client_newRegistration,
+
+            client_requestLobby,
             client_connectRoom,
+            
+            client_requestRoomState,
             client_requestMapData
         } from "./gameLogic/serverLoginRequest.js";
 

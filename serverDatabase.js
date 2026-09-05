@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import { createClient } from "@supabase/supabase-js";
-import {players, rooms, maps, playerSockets, socketPlayers} from "./serverMemory.js";
+import {playersDB, roomsDB, mapsDB, playerSockets, socketPlayers} from "./serverMemory.js";
 
 dotenv.config();
 
