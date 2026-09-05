@@ -1,8 +1,8 @@
 import { sendToSocket, sendToPlayer } from "../serverNetwork.js";
 import { readDatabaseObject, readDatabaseValue } from "../serverDatabase.js";
 import { registerPlayer, getPlayerId} from "../serverNetwork.js";
-import {players, rooms, maps, playerSockets, socketPlayers} from "./serverMemory.js";
-import {readMemoryValue, updateMemoryValue} from "./serverMemory.js";
+import {players, rooms, maps, playerSockets, socketPlayers} from "../serverMemory.js";
+import {readMemoryValue, updateMemoryValue} from "../serverMemory.js";
 
 
 
