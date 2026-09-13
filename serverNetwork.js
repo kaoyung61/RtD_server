@@ -6,25 +6,29 @@ export function startWebSocket(server) {
     const wss = new WebSocketServer({ server });
 
     wss.on("connection", socket => {
-        console.log("Client connected");
-        sendToSocket(socket, { command: "requestToken" });
+        console.log("[WEBSOCKET] New Socket connected");
+        //sendToSocket(socket, { command: "requestToken" });
 
         socket.on("message", message => {
+            console.log("[IN ]", message.toString());
             try {
                 receiveMessage(socket, JSON.parse(message.toString()));
             } catch (error) {
-                console.log("Server error:", error);
+                console.log("[IN  ] ERROR:", error);
                 sendToSocket(socket, { type: "error", data: "Server error" });
             }
         });
 
-        socket.on("close", () => disconnectPlayer(socket));
-        socket.on("error", error => console.log("Socket error:", error));
+        socket.on("close", () => {
+            console.log("[WEBSOCKET] Socket closed");
+            disconnectPlayer(socket);
+        });
+        socket.on("error", error => console.log("[WEBSOCKET] ERROR:", error));
     });
 }
 
 export function registerPlayer(socket, playerId) {
-    if (!playerId) { console.log("Player has no ID"); return false; }
+    if (!playerId) { console.log("[REG ] Player has no ID"); return false; }
 
     const oldSocket = playerSockets.get(playerId);
     if (oldSocket && oldSocket !== socket) socketPlayers.delete(oldSocket);
@@ -35,8 +39,8 @@ export function registerPlayer(socket, playerId) {
     playerSockets.set(playerId, socket);
     socketPlayers.set(socket, playerId);
 
-    console.log(`Player '${playerId}' registered`);
-    console.log("Connected players:", [...playerSockets.keys()]);
+    console.log(`[ REG ] Player '${playerId}' registered`);
+    console.log("[ MEMORY ] Connected players:", [...playerSockets.keys()]);
     return true;
 }
 
@@ -45,13 +49,14 @@ export function getPlayerId(socket) {
 }
 
 export function sendToPlayer(playerId, data) {
-    console.log("Searching:", playerId);
-    console.log("Registered:", [...playerSockets.keys()]);
-    
-    const socket = playerSockets.get(playerId);
-    if (!socket) { console.log(`Player '${playerId}' not found`); return false; }
+    //console.log("func sendToPlayer: Searching:", playerId);
+    //console.log("func sendToPlayer: Registered:", [...playerSockets.keys()]);
+    console.log("[ SEND ] sendToPlayer: ", playerId," data:", data);
 
-    console.log(`Player '${playerId}' found`);
+    const socket = playerSockets.get(playerId);
+    if (!socket) { console.log(`[SEND] ERROR sendToPlayer: Player '${playerId}' not found`); return false; }
+
+    //console.log(`func sendToPlayer: Player '${playerId}' found`);
     return sendToSocket(socket, data);
 }
 
@@ -62,7 +67,7 @@ export function sendToSocket(socket, data) {
         socket.send(JSON.stringify(data));
         return true;
     } catch (error) {
-        console.log("Send error:", error);
+        console.log("[SEND] ERROR sendToSocket:", error);
         return false;
     }
 }
@@ -74,7 +79,7 @@ function disconnectPlayer(socket) {
     if (!playerId) return;
     if (playerSockets.get(playerId) === socket) playerSockets.delete(playerId);
 
-    console.log(`Player '${playerId}' disconnected`);
+    console.log(`[DISCONNECT] Player '${playerId}' disconnected`);
 }
 
 function receiveMessage(socket, data) {

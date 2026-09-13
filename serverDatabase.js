@@ -113,7 +113,7 @@ export async function insertDatabaseObject(
 
 
 export async function readDatabaseTable(tableName) {
-    const { data, error } = await supabase.from(tableName).select("*");
+    const { data, error } = await db.from(tableName).select("*");
 
     if (error) { console.error(`Database error: ${error.message}`); return null; }
     return data;

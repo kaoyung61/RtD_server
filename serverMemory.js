@@ -3,7 +3,7 @@
 // import {players, rooms, maps, playerSockets, socketPlayers} from "./serverMemory.js";
 // import {readMemoryValue, updateMemoryValue} from "./serverMemory.js";
 
-import { writeDatabaseValue } from "./serverDatabase.js";
+import { writeDatabaseValue, readDatabaseTable } from "./serverDatabase.js";
 
 export const playerSockets = new Map(); // playerId -> socket
 export const socketPlayers = new Map(); // socket -> playerId
@@ -24,7 +24,10 @@ export async function loadServerMemory() {
 
 export function readMemoryValue(memoryMap, searchColumn, searchValue, returnColumn) {
     for (const object of memoryMap.values()) {
-        if (object[searchColumn] === searchValue) return object[returnColumn] ?? null;
+        if (object[searchColumn] === searchValue) {
+            if (returnColumn === "*") return object;
+            return object[returnColumn] ?? null;
+        }
     }
     return null;
 }

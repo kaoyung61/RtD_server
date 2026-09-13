@@ -22,35 +22,35 @@ export async function client_loginOnServer(socket, data) {
 }
 
 export async function client_authoriseOnServer(socket, data) {
-    console.log("client_authoriseOnServer start");
+    //console.log("client_authoriseOnServer start");
     const playerID = readMemoryValue(playersDB, "token", data.token, "id");
 
     if (!playerID) {
         sendToSocket(socket, { command: "errAuth", text: "Authorisation failed" });
-        console.log("Authorisation failed");
+        console.log("[AUTH] Authorisation failed");
         return false;
     }
 
     registerPlayer(socket, Number(playerID));
     sendToSocket(socket, { command: "auth", success: true });
-    console.log("Authorisation successful");
+    //console.log("Authorisation successful");
     return true;
 }
 
 
 export async function client_newRegistration(socket, data) {
-    console.log("client_newRegistration start");
+    //console.log("client_newRegistration start");
     sendToSocket(socket, { command: "message", text: "client_newRegistration: Neuer Client not registriert" });
-    console.log("client_newRegistration end");
+    //console.log("client_newRegistration end");
 }
 
 export async function client_connectRoom(socket, request) {
-    console.log("client_connectRoom start");
+    //console.log("client_connectRoom start");
     let playerID = getPlayerId(socket);
     let playerRoomsID = readMemoryValue(playersDB, "id", playerID, "rooms");
     let roomID = Number(request.data.roomID);
-    console.log("Player _" + playerID + "_ connecting to room _" + roomID + "_");
-    console.log("Available rooms for player _" + playerID + "_ : _", playerRoomsID+ "_");
+    //console.log("Player _" + playerID + "_ connecting to room _" + roomID + "_");
+    //console.log("Available rooms for player _" + playerID + "_ : _", playerRoomsID+ "_");
     if (playerRoomsID.includes(roomID)) {
         let room = {
             id: roomID,
@@ -59,28 +59,28 @@ export async function client_connectRoom(socket, request) {
         };
         sendToPlayer(playerID, { command: "RoomConnection", room: room });
         //sendRoomState(playerID, roomID);
-        console.log("Player _" + playerID + "_ connecting to room _" + room.id + "_");
+        console.log("[ROOM] Player _" + playerID + "_ connected to room _" + room.id + "_");
 
     } else {
         sendToPlayer(playerID, { command: "errRoomConnection", text: "Player is not allowed to connect to this room" });
-        console.log("Error: Player _" + playerID + "_ is not allowed to connect to room _" + roomID + "_");
+        console.log("[ROOM] Error: Player _" + playerID + "_ is not allowed to connect to room _" + roomID + "_");
     }
-    console.log("client_connectRoom end");
+    //console.log("client_connectRoom end");
 }
 
 
 export async function client_requestLobby(socket, request) {
-    console.log("client_requestLobby start");
+    //console.log("client_requestLobby start");
     let playerID = getPlayerId(socket);
     sendLobby(playerID);
-    console.log("client_requestLobby end");
+    //console.log("client_requestLobby end");
 }
 
 
 export async function sendLobby(playerID) { 
-    console.log("sendLobby for player " + playerID + " start");
+    //console.log("sendLobby for player " + playerID + " start");
     let playerRoomsID = readMemoryValue(playersDB, "id", playerID, "rooms");
-    console.log("playerRoomsID:", playerRoomsID);
+    //console.log("playerRoomsID:", playerRoomsID);
     let playerRooms = [];
     for (let n of playerRoomsID) {
         let roomID = n;
@@ -92,12 +92,41 @@ export async function sendLobby(playerID) {
             map: roomMap
         };
         playerRooms.push(room);
-        console.log("sendLobby: playerRooms: ",n, " ", playerRooms);
+        //console.log("sendLobby: playerRooms: ",n, " ", playerRooms);
     }
     sendToPlayer(playerID, { command: "lobby", rooms: playerRooms });
-    console.log("sendLobby for player " + playerID + " end");
+    //console.log("sendLobby for player " + playerID + " end");
 }
  
+
+
+
+
+
+
+export async function client_requestMapData(socket, request) { // функция отсылает данные карты любому 
+    //console.log("client_requestMapData start");
+    console.log(request);
+    let roomMapInfo = readMemoryValue(mapsDB, "name", request.data.mapName, "*");
+
+    console.log(roomMapInfo);
+    sendToSocket(socket, { command: "mapData", data: roomMapInfo });
+    //console.log("client_requestMapData end");
+}
+
+
+export async function client_requestRoomState(socket, request) { // функция отсылает данные room
+    let playerID = getPlayerId(socket);
+    let roomID = Number(request.data.roomID);
+    
+    let playerRoomsID = readMemoryValue(playersDB, "id", playerID, "rooms");
+    if (!playerRoomsID.includes(roomID)) {
+        sendToPlayer(playerID, { command: "errRoomState", text: "Player is not allowed to access this room" });
+        return;
+    }
+    sendRoomState(playerID, roomID);
+}
+
 
 export async function sendRoomState(playerID, RoomID) {
     let roomID = Number(RoomID);
@@ -118,18 +147,4 @@ export async function sendRoomState(playerID, RoomID) {
     sendToPlayer(playerID, { command: "roomState", data: dataToSend })
     //sendToSocket(socket, { command: "roomState", data: dataToSend });
 
-}
-
-
-
-
-export async function client_requestMapData(socket, request) { // функция отсылает данные карты любому 
-    console.log("client_requestMapData start");
-    let roomMapInfo = readMemoryValue(mapsDB, "name", request.map, "*");
-    sendToSocket(socket, { command: "mapData", data: roomMapInfo });
-    console.log("client_requestMapData end");
-}
-
-export async function client_requestRoomState(socket, request) { // функция отсылает данные карты любому
-    console.log("client_requestRoomState start");
 }
