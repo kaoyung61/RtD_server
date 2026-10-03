@@ -32,7 +32,7 @@ export async function client_authoriseOnServer(socket, data) {
     }
 
     registerPlayer(socket, Number(playerID));
-    sendToSocket(socket, { command: "auth", success: true });
+    sendToSocket(socket, { command: "auth", success: true,playerID: playerID });
     //console.log("Authorisation successful");
     return true;
 }
@@ -133,18 +133,42 @@ export async function sendRoomState(playerID, RoomID) {
     let roomName = readMemoryValue(roomsDB, "id", roomID, "name");
     let roomMap = readMemoryValue(roomsDB, "id", roomID, "map");
     let gameState = readMemoryValue(roomsDB, "id", roomID, "gameState");
-    let playerState = readMemoryValue(roomsDB, "id", roomID, "playerState");
-    let territoriesState = readMemoryValue(roomsDB, "id", roomID, "territories");
+    let playersState = readMemoryValue(roomsDB, "id", roomID, "playersState");
+    let territoriesState = readMemoryValue(roomsDB, "id", roomID, "territoriesState");
+    
+    gameState = { ...gameState };
+    gameState.activePhase = gameState.phaseOrder[gameState.activePhase];
+    gameState.activePlayer = gameState.playerOrder[gameState.activePlayer-1];
 
     let dataToSend = {
         roomID: roomID,
         roomName: roomName,
         roomMap: roomMap,
         gameState: gameState,
-        playerState: playerState,
+        playersState: playersState,
         territoriesState: territoriesState
     };
     sendToPlayer(playerID, { command: "roomState", data: dataToSend })
     //sendToSocket(socket, { command: "roomState", data: dataToSend });
+
+}
+
+
+export async function sendALL_roomUPD(type, requestData){
+    console.log("[ FUNC ] serverLoginRequest_sendALL_roomUPD");
+    console.log(requestData);
+    let roomID = (requestData.roomID ?? requestData.id);
+    let roomInfo = await readMemoryValue(roomsDB, "id", Number(roomID), "*");
+    //console.log(roomInfo);
+    let dataToSend = {
+        phase: type,
+        updInfo:requestData
+    };
+    //console.log(roomInfo)
+    roomInfo.playersState.forEach(player => {
+        let playerID = player.id;
+        const socket = playerSockets.get(playerID);
+        if (socket) {sendToPlayer(playerID, { command: "roomUPD", data: dataToSend })}
+    });
 
 }

@@ -8,10 +8,14 @@ import {    client_loginOnServer,
             client_connectRoom,
             
             client_requestRoomState,
+
             client_requestMapData
         } from "./gameLogic/serverLoginRequest.js";
 
-
+import {    client_requestNextPhase,
+            client_requestMove
+    
+        } from "./gameLogic/serverGameLogic.js";
 
 
 
@@ -37,13 +41,18 @@ export async function clientRequest(socket, request) {
 
         case "connectRoom":
             return client_connectRoom(socket, request);
-
+ 
         case "requestMapData":
             return client_requestMapData(socket, request);
         
         case "requestRoomState":
             return client_requestRoomState(socket, request);
 
+        case "requestNextPhase":
+            return client_requestNextPhase(socket, request.data);
+
+        case "requestMove":
+            return client_requestMove(socket, request.data);
 
         //
         // ELSE

@@ -5,12 +5,13 @@ import cors from "cors";
 import http from "http";
 import dotenv from "dotenv";
 
+
 //import { processClientRequest } from "./serverRequestFromClient.js";
 import { startWebSocket } from "./serverNetwork.js";
 console.log("______________________________________________________________");
 console.log("______________________________________________________________");
 console.log("______________________________________________________________");
-console.log("Server starting...");
+console.log("Loading...");
 dotenv.config();
 
 const app = express();
@@ -20,8 +21,6 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
     res.send("Server is running");
-    console.log("______________________________________________________________");
-    console.log("______________________________________________________________");
 });
 
 const server = http.createServer(app);
@@ -36,4 +35,4 @@ try {
     });
 
 } catch (error) {console.error("Server memory loading failed:", error);}
-
+ 

@@ -36,7 +36,8 @@ export async function updateMemoryValue(memoryMap, id, column, value) {
     const object = memoryMap.get(id);
     if (!object) { console.log(`Memory object '${id}' not found`); return false; }
 
-    const tableName = memoryMap.name.replace("DB", "");
+    const tableName = memoryMap === roomsDB ? "rooms" : memoryMap === playersDB ? "players" : "maps";
+
     const success = await writeDatabaseValue(tableName, "id", id, column, value);
     if (!success) { console.log(`Database update failed: ${tableName}.${column}, ID '${id}'`); return false; }
 
